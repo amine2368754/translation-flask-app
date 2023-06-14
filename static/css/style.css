@@ -1,0 +1,38 @@
+/* Custom styles */
+body {
+    background-color: #f8f9fa;
+    font-family: Arial, sans-serif;
+  }
+  
+  .container {
+    margin-top: 50px;
+  }
+  
+  h1 {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  #translate,
+  #record-btn,
+  #stop-btn,
+  #play-btn {
+    margin-bottom: 10px;
+    
+  }
+  
+  #audio-playback {
+    margin-top: 20px;
+  }
+  
+  /* Center the audio element */
+  #audio {
+    display: block;
+    margin: 0 auto;
+  }
+  
+  

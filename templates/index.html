@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Translate and analyze text with Azure Cognitive Services.">
+    <title>Translate and analyze text with Azure Cognitive Services</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/css/style.css">
+
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center mt-5">Translation</h1>
+        <div class="row">
+            <div class="col-lg-6">
+                    <form action="/translate" method="post">
+                        <div class="form-group">
+                            <label for="text-to-translate">Enter the text you'd like to translate:</label>
+                            <textarea class="form-control" id="text-to-translate" name="text" rows="4">{{t}}{{x}}{{t2}}</textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="select-language">Translate from:</label>
+                            <select class="form-control" id="select-language" name="language_from">
+                                <option value="ar">Arabic</option>
+                                <option value="en">English</option>
+                                <option value="fr">Frensh</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                          <label for="select-language">Translate to:</label>
+                          <select class="form-control" id="select-language" name="language_to">
+                              <option value="ar">Arabic</option>
+                              <option value="en">English</option>
+                              <option value="fr">Frensh</option>
+                          </select>
+                      </div>
+                        <button type="submit" class="btn btn-primary mb-2" id="translate" style="background-color: limegreen; ">Translate text</button>
+                    </form>
+                    <form action="/translate1" method="post">
+                      <div class="form-group" style="margin-top: 50px;">
+                          <label for="text-to-translate">Enter the text you'd like to translate:</label>
+                          <textarea class="form-control" id="text-to-translate" name="text1" rows="4">{{t1}}{{x}}{{t3}}</textarea>
+                      </div>
+                      
+                      <button type="submit" class="btn btn-primary mb-2" id="translate1" style="background-color: limegreen;">Translate text</button>
+                  </form>
+                  <!-- Audio -->
+                  <form action="/translate_aud" method="post" enctype="multipart/form-data" style="margin-top: 100px;" >
+                    <div>
+                      <button id="record-btn" onclick="startRecording()">Start Recording</button>
+                      <button id="stop-btn" onclick="stopRecording()">Stop Recording</button>
+                  </div>
+              
+                  <form action="/translate_aud" method="post">
+                      <input type="hidden" id="audio-data" name="audio-data" value="">
+                      <div>
+                        <label for="language">Select source language:</label>
+                        <select id="language" name="language_aud_from">
+                            <option value="ar">Arabic</option>
+                            <option value="en">English</option>
+                            <option value="fr">French</option>
+                            <!-- Add more language options as needed -->
+                        </select>
+                    </div>
+                      <div>
+                          <label for="language">Select target language:</label>
+                          <select id="language" name="language_aud">
+                              <option value="ar">Arabic</option>
+                              <option value="en">English</option>
+                              <option value="fr">French</option>
+                              <!-- Add more language options as needed -->
+                          </select>
+                      </div>
+                      <button type="submit" class="btn btn-primary mb-2" id="translate_aud" style="background-color: limegreen;">Translate</button>
+                  </form>
+              
+                  <script>
+                      let mediaRecorder;
+                      let chunks = [];
+              
+                      function startRecording() {
+                          navigator.mediaDevices.getUserMedia({ audio: true })
+                              .then(function(stream) {
+                                  mediaRecorder = new MediaRecorder(stream);
+              
+                                  mediaRecorder.addEventListener("dataavailable", function(event) {
+                                      chunks.push(event.data);
+                                  });
+              
+                                  mediaRecorder.addEventListener("stop", function() {
+                                      const blob = new Blob(chunks, { type: "audio/webm" });
+                                      const reader = new FileReader();
+                                      reader.readAsDataURL(blob);
+                                      reader.onloadend = function() {
+                                          const base64data = reader.result;
+                                          document.getElementById("audio-data").value = base64data;
+                                      };
+              
+                                      chunks = [];
+                                  });
+              
+                                  mediaRecorder.start();
+                              })
+                              .catch(function(error) {
+                                  console.log("Error accessing microphone:", error);
+                              });
+                      }
+              
+                      function stopRecording() {
+                          if (mediaRecorder && mediaRecorder.state === "recording") {
+                              mediaRecorder.stop();
+                          }
+                      }
+                  </script>
+                </form>
+                   
+                    <!---------------------------------------------------------------------------------
+                                      -->
+                    <!----------------------------------------------------------------------------------->
+            </div>
+            <div class="col-lg-6">
+                <form>
+                    <div class="form-group" id="translator-text-response">
+                        <label for="translation-result">Translated text:</label>
+                        <textarea readonly class="form-control" id="translation-result" rows="4">{{r}}</textarea>
+                    </div>
+                    
+                </form>
+
+                <form>
+                  <div class="form-group" id="translator-text-response" style="margin-top: 296px;">
+                      <label for="translation-result">Translated text:</label>
+                      <textarea readonly class="form-control" id="translation-result1" rows="4">{{r1}}{{r2}}{{r3}}</textarea>
+                  </div>
+
+                <!--tran_img-->
+              </form>
+              <form action="/translate_img" method="post" enctype="multipart/form-data" style="margin-top: 160px;">
+                <div>
+                    <label for="image">Upload an image:</label>
+                    <input type="file" id="image" name="image">
+                </div>
+                <div class="form-group">
+                  <label for="select-language">Translate from:</label>
+                  <select id="select-language" name="language_img_from">
+                      <option value="ar">Arabic</option>
+                      <option value="en">English</option>
+                      <option value="fr">Frensh</option>
+                  </select>
+              </div>
+                <div>
+                    <label for="language">Translate to:</label>
+                    <select id="language" name="language_img">
+                        <option value="ar">Arabic</option>
+                        <option value="en">English</option>
+                        <option value="fr">French</option>
+                        <!-- Add more language options as needed -->
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary mb-2" id="translate_img" style="background-color: limegreen;">Translate</button>
+            </form>
+              
+            
+        
+            
+              <!--{% if translated_text %}
+            <div>
+                <h2>Translated Text:</h2>
+                <p>{{ translated_text }}</p>
+            </div>
+            {% endif %}
+                <button type="submit" class="btn btn-primary mb-2" id="text-to-speech" style="background-color: limegreen;">Convert text-to-speech</button>
+                <div id="audio-playback">
+                    <audio id="audio" controls>
+                        <source id="audio-source" type="audio/mpeg">
+                    </audio>
+                </div>
+                -->
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="static/scripts/main.js"></script>
+</body>
+</html>
